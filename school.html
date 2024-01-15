@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Περιγραφή του σχολείου εδώ">
+    <title>About for School</title>
+    <style>
+         body {
+            background-color: #2b4e2f; /* Dark green background */
+            color: #ffffff; /* White text color */
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background-color: #000000; /* Black navigation background */
+            padding: 15px;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #ffffff; /* White navigation link color */
+            font-weight: bold;
+            font-size: 16px;
+            transition: color 0.3s ease-in-out;
+        }
+
+        nav ul li a:hover {
+            color: #a8ff60; /* Light green on hover */
+        }
+
+        .content {
+            border: 2px solid #ffffff; /* White border for content */
+            padding: 20px;
+            margin: 20px;
+            background-color: #1a1a1a; /* Dark background color */
+            border-radius: 10px;
+        }
+
+        h2 {
+            color: #a8ff60; /* Light green heading color */
+            margin-bottom: 15px;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #a8ff60; /* Light green label color */
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            resize: vertical; /* Επιτρέπει την κατακόρυφη αλλαγή μεγέθους του textarea */
+        }
+
+        input[type="submit"] {
+            background-color: #000000; /* Black submit button background */
+            color: #a8ff60; /* Light green text color on submit button */
+            cursor: pointer;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #a8ff60; /* Light green on hover */
+            color: #000000; /* Black text color on hover */
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="a-site.html">Home</a></li>
+            <li><a href="shop.html">My development Shop</a></li>
+            <li><a href="school.html">About for School</a></li>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <h2>About Our School</h2>
+        <p>Address: 123 School Street, City</p>
+        <p>Phone: 123-456-7890</p>
+        <p>Links: <a href="#">School Website</a> | <a href="#">School Calendar</a></p>
+
+        <form id="commentForm">
+            <h2>Leave a Comment</h2>
+            <label for="name">Your Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="comment">Your Comment:</label>
+            <textarea id="comment" name="comment" rows="4" required></textarea>
+
+            <input type="button" value="Submit Comment" onclick="addComment()">
+        </form>
+
+        <section id="user-comments">
+            <h2>User Comments</h2>
+            <!-- Εδώ θα εμφανίζονται τα σχόλια των χρηστών -->
+        </section>
+    </div>
+    <section id="user-comments">
+        <h2>User Comments</h2>
+        <button onclick="openModal()">View Comments</button>
+    </section>
+
+    <!-- Modal -->
+    <div id="commentsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Last 15 Comments</h2>
+            <div id="modal-comments"></div>
+        </div>
+    </div>
+    <script>
+        var comments = []; // Πίνακας για τα σχόλια
+        var maxComments = 15; // Το μέγιστο πλήθος των σχολίων
+
+        function addComment() {
+            var name = document.getElementById("name").value;
+            var commentText = document.getElementById("comment").value;
+
+            if (name && commentText) {
+                var comment = "<strong>" + name + ":</strong> " + commentText;
+                comments.push(comment);
+
+                // Κρατάμε μόνο τα τελευταία 15 σχόλια
+                if (comments.length > maxComments) {
+                    comments.shift();
+                }
+
+                // Ενημέρωση της ενότητας με τα σχόλια
+                displayComments();
+                
+                // Καθαρισμός των πεδίων εισαγωγής
+                document.getElementById("name").value = "";
+                document.getElementById("comment").value = "";
+            }
+        }
+
+        function displayComments() {
+            var commentSection = document.getElementById("user-comments");
+            commentSection.innerHTML = "<h2>User Comments</h2>";
+
+            for (var i = 0; i < comments.length; i++) {
+                var commentDiv = document.createElement("div");
+                commentDiv.innerHTML = comments[i];
+                commentSection.appendChild(commentDiv);
+            }
+        }
+
+        // Εμφάνιση αρχικών σχολίων
+        displayComments();
+                // Εμφάνιση modal με τα τελευταία 15 σχόλια
+                function openModal() {
+            var modal = document.getElementById("commentsModal");
+            var modalComments = document.getElementById("modal-comments");
+            
+            // Εμφάνιση των τελευταίων 15 σχολίων στο modal
+            modalComments.innerHTML = "";
+            var start = Math.max(0, comments.length - maxComments); // Βρίσκουμε την αρχή του τελευταίου δεκαπενταπενταλέπτου
+            for (var i = start; i < comments.length; i++) {
+                var commentDiv = document.createElement("div");
+                commentDiv.innerHTML = comments[i];
+                modalComments.appendChild(commentDiv);
+            }
+
+            modal.style.display = "flex";
+        }
+
+        // Κλείσιμο του modal
+        function closeModal() {
+            var modal = document.getElementById("commentsModal");
+            modal.style.display = "none";
+        }
+
+    
+    
+    
+    </script>
+</body>
+
+</html>
